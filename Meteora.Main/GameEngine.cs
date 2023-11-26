@@ -6,11 +6,11 @@ namespace Meteora.Main
 {
     public class GameEngine
     {
-        public GameEngine()
+        public GameEngine(IUser user, IConsoleInterface consoleInterface, IEnumerable<string> vowels)
         {
-            _user = new User();
-            _interface = new ConsoleInterface();
-            _vowels = Letters.Vowels.ToList();
+            _user = user;
+            _interface = consoleInterface;
+            _vowels = vowels.ToList();
         }
 
         private IUser _user;
@@ -339,8 +339,7 @@ namespace Meteora.Main
             }
             else
             {
-                _interface
-                    .GenerateLose();
+                _interface.GenerateLose();
             }
 
             _interface
