@@ -2,9 +2,9 @@
 
 namespace Meteora.Main
 {
-    public class ConsoleInterface
+    public class ConsoleInterface : IConsoleInterface
     {
-        public ConsoleInterface CleareScreen() 
+        public ConsoleInterface CleareScreen()
         {
             Console.Clear();
 
@@ -126,7 +126,7 @@ namespace Meteora.Main
             return this;
         }
 
-        public ConsoleInterface GenerateNewGame() 
+        public ConsoleInterface GenerateNewGame()
         {
             Console.WriteLine("");
             Console.Write("---- Options:");

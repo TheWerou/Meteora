@@ -2,7 +2,7 @@
 
 namespace Meteora.Main
 {
-    public class PasswordHandler
+    public class PasswordHandler : IPasswordHandler
     {
         public PasswordHandler(string password)
         {
@@ -23,7 +23,7 @@ namespace Meteora.Main
             get { return new string(_currentHiddenPassword.ToArray()); }
         }
 
-        public bool TryShowLetter(char letter, out int foundLetters) 
+        public bool TryShowLetter(char letter, out int foundLetters)
         {
             foundLetters = 0;
             var indexes = _currentPassword.AllIndexesOf(letter);
@@ -32,7 +32,7 @@ namespace Meteora.Main
 
             foundLetters = indexes.Count();
 
-            foreach (var index in indexes) 
+            foreach (var index in indexes)
             {
                 var foundLetter = _currentPassword[index];
                 _currentHiddenPassword[index] = foundLetter;
@@ -41,7 +41,7 @@ namespace Meteora.Main
             return true;
         }
 
-        public bool IsPasswordGuessed() 
+        public bool IsPasswordGuessed()
         {
             return _currentHiddenPassword.SequenceEqual(_currentPassword);
         }

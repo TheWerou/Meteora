@@ -13,38 +13,30 @@ namespace Meteora.Main
             _vowels = Letters.Vowels.ToList();
         }
 
-        private User _user;
-        private PasswordHandler _passwordHandler;
-        private ConsoleInterface _interface;
+        private IUser _user;
+        private IPasswordHandler _passwordHandler;
+        private IConsoleInterface _interface;
         private List<string> _vowels;
         private string _userResponse;
 
-        private IEnumerable<int> _welcomeScreenOptions = new[] { 1, 2 }; 
-        private IEnumerable<int> _startGameScreenOptions = new[] { 1, 2, 3, 4, 5 }; 
-        private IEnumerable<int> _gameScreenOptions = new[] { 1, 2, 3 }; 
-        private IEnumerable<int> _endGameScreenOptions = new[] { 1, 2 }; 
-
-        public void Run() 
+        public void Run()
         {
             var selectedOption = WelcomeScreen();
-            if (selectedOption == 2) 
-            {
-                Exit();
-                return;
-            }
-                
-            StartGame();
+            if (selectedOption != 2)
+                StartGame();
+
+            Exit();
         }
 
-        public void Exit() 
+        public void Exit()
         {
             _interface
                 .CleareScreen()
                 .GenerateGoodBye();
         }
 
-        public void StartGame() 
-        {   
+        public void StartGame()
+        {
             var selectedOption = StartGameScreenDificulty();
             if (selectedOption == 5)
             {
@@ -60,14 +52,19 @@ namespace Meteora.Main
                 Exit();
                 return;
             }
-                
+
             GetNewPassword(selectedOption);
 
+            MainGameLoop();
+        }
+
+        private void MainGameLoop()
+        {
             while (true)
             {
-                while(true) 
+                while (true)
                 {
-                    selectedOption = GameScreen();
+                    var selectedOption = GameScreen();
                     if (selectedOption == 3)
                         return;
                     else if (selectedOption == 2)
@@ -81,13 +78,13 @@ namespace Meteora.Main
                     }
                 }
 
-                if (_passwordHandler.IsPasswordGuessed()) 
+                if (_passwordHandler.IsPasswordGuessed())
                 {
                     EndGame(true);
                     break;
                 }
-                    
-                if (!_user.IsUserAlive()) 
+
+                if (!_user.IsUserAlive())
                 {
                     EndGame(false);
                     break;
@@ -95,9 +92,10 @@ namespace Meteora.Main
             }
         }
 
-        private void ShopScreen() 
+        private void ShopScreen()
         {
             _interface.CleareScreen()
+                .GenerateUserPanel(_user.Lives, _user.Points)
                 .GenerateShop()
                 .GetUserResponse(out _userResponse);
 
@@ -107,7 +105,9 @@ namespace Meteora.Main
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
                 var listOfLetters = _vowels.ToList();
-                var isIndexCorrect = listOfLetters.Count > option || option < 0;
+                var index = option - 2;
+
+                var isIndexCorrect = listOfLetters.Count > index || index < 0;
 
                 if (!successfullyParsed)
                 {
@@ -117,7 +117,7 @@ namespace Meteora.Main
 
                 if (option == 1)
                     break;
-                
+
                 if (!isIndexCorrect)
                 {
                     WrongShopScreen();
@@ -130,12 +130,13 @@ namespace Meteora.Main
                     continue;
                 }
 
-                AddRemovePoints();
-                _vowels.RemoveAt(option);
+                AddRemovePoints(false);
+                _vowels.RemoveAt(index);
+                break;
             }
         }
 
-        private void WrongShopScreen() 
+        private void WrongShopScreen()
         {
             _interface.CleareScreen()
                 .GenerateShop()
@@ -143,16 +144,19 @@ namespace Meteora.Main
                 .GetUserResponse(out _userResponse);
         }
 
-        private void EndGame(bool isGameWon) 
+        private void EndGame(bool isGameWon)
         {
             var selectedOption = WinScreen(isGameWon);
             if (selectedOption == 2)
                 Exit();
             else if (selectedOption == 1)
+            {
+                _user.ResetUser();
                 StartGame();
+            }
         }
 
-        private void GuessLetterScreen() 
+        private void GuessLetterScreen()
         {
             int option;
 
@@ -165,20 +169,20 @@ namespace Meteora.Main
                 return;
             }
 
-            AddRemovePoints();
+            AddRemovePoints(true);
         }
 
-        private void AddRemovePoints() 
+        private void AddRemovePoints(bool canPunish)
         {
             int foundLetters = 0;
             var hasLaterChanged = _passwordHandler.TryShowLetter(_userResponse.ToLower()[0], out foundLetters);
-            if (!hasLaterChanged)
+            if (!hasLaterChanged && canPunish)
                 _user.HitUser(1);
 
             _user.Points += foundLetters * 50;
         }
 
-        private void GetNewPassword(int option) 
+        private void GetNewPassword(int option)
         {
             switch (option)
             {
@@ -220,18 +224,18 @@ namespace Meteora.Main
             }
         }
 
-        private int WelcomeScreen() 
+        private int WelcomeScreen()
         {
             _interface
                 .GenerateWelcomeScreen()
                 .GetUserResponse(out _userResponse);
 
-            while (true) 
-            { 
+            while (true)
+            {
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !_welcomeScreenOptions.Contains(option))
+                if (!successfullyParsed && !InterfaceOptions.WelcomeScreenOptions.Contains(option))
                 {
                     _interface
                         .CleareScreen()
@@ -257,7 +261,7 @@ namespace Meteora.Main
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !_startGameScreenOptions.Contains(option))
+                if (!successfullyParsed && !InterfaceOptions.StartGameScreenOptions.Contains(option))
                 {
                     _interface
                         .CleareScreen()
@@ -271,7 +275,7 @@ namespace Meteora.Main
             }
         }
 
-        private int StartGameScreen() 
+        private int StartGameScreen()
         {
             _interface
                 .CleareScreen()
@@ -283,7 +287,7 @@ namespace Meteora.Main
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !_startGameScreenOptions.Contains(option))
+                if (!successfullyParsed && !InterfaceOptions.StartGameScreenOptions.Contains(option))
                 {
                     _interface
                         .CleareScreen()
@@ -297,7 +301,7 @@ namespace Meteora.Main
             }
         }
 
-        private int GameScreen() 
+        private int GameScreen()
         {
             _interface.CleareScreen()
                 .GenerateUserPanel(_user.Lives, _user.Points)
@@ -305,12 +309,12 @@ namespace Meteora.Main
                 .GenerateUserInstructions()
                 .GetUserResponse(out _userResponse);
 
-            while (true) 
+            while (true)
             {
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !_gameScreenOptions.Contains(option))
+                if (!successfullyParsed && !InterfaceOptions.GameScreenOptions.Contains(option))
                 {
                     _interface
                         .CleareScreen()
@@ -325,11 +329,11 @@ namespace Meteora.Main
             }
         }
 
-        private int WinScreen(bool isWin) 
+        private int WinScreen(bool isWin)
         {
             _interface.CleareScreen();
 
-            if (isWin) 
+            if (isWin)
             {
                 _interface.GenerateWin();
             }
@@ -345,10 +349,10 @@ namespace Meteora.Main
 
             int option;
 
-            while (true) 
+            while (true)
             {
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !_endGameScreenOptions.Contains(option))
+                if (!successfullyParsed && !InterfaceOptions.EndGameScreenOptions.Contains(option))
                 {
                     _interface
                         .GenerateNewGame()
