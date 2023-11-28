@@ -1,6 +1,6 @@
-﻿namespace Meteora.Main.Model
+﻿namespace Meteora.Main
 {
-    public class User : IUser
+    public class User
     {
         public int Points { get; set; }
 

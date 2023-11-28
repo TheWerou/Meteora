@@ -1,21 +1,17 @@
-﻿using Meteora.Main.Extentions;
-using Meteora.Main.Model;
-using Meteora.Main.Utils;
-
-namespace Meteora.Main
+﻿namespace Meteora.Main
 {
     public class GameEngine
     {
-        public GameEngine(IUser user, IConsoleInterface consoleInterface, IEnumerable<string> vowels)
+        public GameEngine(User user, ConsoleInterface consoleInterface)
         {
             _user = user;
             _interface = consoleInterface;
-            _vowels = vowels.ToList();
+            _vowels = Data.Vowels.ToList();
         }
 
-        private IUser _user;
-        private IPasswordHandler _passwordHandler;
-        private IConsoleInterface _interface;
+        private User _user;
+        private PasswordHandler _passwordHandler;
+        private ConsoleInterface _interface;
         private List<string> _vowels;
         private string _userResponse;
 
@@ -30,9 +26,8 @@ namespace Meteora.Main
 
         public void Exit()
         {
-            _interface
-                .CleareScreen()
-                .GenerateGoodBye();
+            _interface.CleareScreen();
+            _interface.GenerateGoodBye();
         }
 
         public void StartGame()
@@ -94,10 +89,10 @@ namespace Meteora.Main
 
         private void ShopScreen()
         {
-            _interface.CleareScreen()
-                .GenerateUserPanel(_user.Lives, _user.Points)
-                .GenerateShop()
-                .GetUserResponse(out _userResponse);
+            _interface.CleareScreen();
+            _interface.GenerateUserPanel(_user.Lives, _user.Points);
+            _interface.GenerateShop();
+            _interface.GetUserResponse(out _userResponse);
 
             while (true)
             {
@@ -138,10 +133,10 @@ namespace Meteora.Main
 
         private void WrongShopScreen()
         {
-            _interface.CleareScreen()
-                .GenerateShop()
-                .GenerateError()
-                .GetUserResponse(out _userResponse);
+            _interface.CleareScreen();
+            _interface.GenerateShop();
+            _interface.GenerateError();
+            _interface.GetUserResponse(out _userResponse);
         }
 
         private void EndGame(bool isGameWon)
@@ -164,7 +159,8 @@ namespace Meteora.Main
             var successfullyParsed = int.TryParse(_userResponse, out option);
             if (_userResponse == "" || successfullyParsed)
             {
-                _interface.CleareScreen().GenerateError();
+                _interface.CleareScreen();
+                _interface.GenerateError();
                 Thread.Sleep(2000);
                 return;
             }
@@ -187,16 +183,16 @@ namespace Meteora.Main
             switch (option)
             {
                 case 1:
-                    _passwordHandler = new PasswordHandler(Questions.CapitalCities.RandomElement());
+                    _passwordHandler = new PasswordHandler(Data.CapitalCities.RandomElement());
                     break;
                 case 2:
-                    _passwordHandler = new PasswordHandler(Questions.Countries.RandomElement());
+                    _passwordHandler = new PasswordHandler(Data.Countries.RandomElement());
                     break;
                 case 3:
-                    _passwordHandler = new PasswordHandler(Questions.CarBrand.RandomElement());
+                    _passwordHandler = new PasswordHandler(Data.CarBrand.RandomElement());
                     break;
                 case 4:
-                    _passwordHandler = new PasswordHandler(Questions.SportDisciplne.RandomElement());
+                    _passwordHandler = new PasswordHandler(Data.SportDisciplne.RandomElement());
                     break;
                 default:
                     break;
@@ -226,22 +222,20 @@ namespace Meteora.Main
 
         private int WelcomeScreen()
         {
-            _interface
-                .GenerateWelcomeScreen()
-                .GetUserResponse(out _userResponse);
+            _interface.GenerateWelcomeScreen();
+            _interface.GetUserResponse(out _userResponse);
 
             while (true)
             {
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !InterfaceOptions.WelcomeScreenOptions.Contains(option))
+                if (!successfullyParsed && !Data.WelcomeScreenOptions.Contains(option))
                 {
-                    _interface
-                        .CleareScreen()
-                        .GenerateWelcomeScreen()
-                        .GenerateError()
-                        .GetUserResponse(out _userResponse);
+                    _interface.CleareScreen();
+                    _interface.GenerateWelcomeScreen();
+                    _interface.GenerateError();
+                    _interface.GetUserResponse(out _userResponse);
                     continue;
                 }
 
@@ -251,23 +245,21 @@ namespace Meteora.Main
 
         private int StartGameScreenDificulty()
         {
-            _interface
-                .CleareScreen()
-                .GenerateChoseDifficulty()
-                .GetUserResponse(out _userResponse);
+            _interface.CleareScreen();
+            _interface.GenerateChoseDifficulty();
+            _interface.GetUserResponse(out _userResponse);
 
             while (true)
             {
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !InterfaceOptions.StartGameScreenOptions.Contains(option))
+                if (!successfullyParsed && !Data.StartGameScreenOptions.Contains(option))
                 {
-                    _interface
-                        .CleareScreen()
-                        .GenerateChoseDifficulty()
-                        .GenerateError()
-                        .GetUserResponse(out _userResponse);
+                    _interface.CleareScreen();
+                    _interface.GenerateChoseDifficulty();
+                    _interface.GenerateError();
+                    _interface.GetUserResponse(out _userResponse);
                     continue;
                 }
 
@@ -277,23 +269,21 @@ namespace Meteora.Main
 
         private int StartGameScreen()
         {
-            _interface
-                .CleareScreen()
-                .GenerateChoseCategory()
-                .GetUserResponse(out _userResponse);
+            _interface.CleareScreen();
+            _interface.GenerateChoseCategory();
+            _interface.GetUserResponse(out _userResponse);
 
             while (true)
             {
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !InterfaceOptions.StartGameScreenOptions.Contains(option))
+                if (!successfullyParsed && !Data.StartGameScreenOptions.Contains(option))
                 {
-                    _interface
-                        .CleareScreen()
-                        .GenerateChoseCategory()
-                        .GenerateError()
-                        .GetUserResponse(out _userResponse);
+                    _interface.CleareScreen();
+                    _interface.GenerateChoseCategory();
+                    _interface.GenerateError();
+                    _interface.GetUserResponse(out _userResponse);
                     continue;
                 }
 
@@ -303,26 +293,25 @@ namespace Meteora.Main
 
         private int GameScreen()
         {
-            _interface.CleareScreen()
-                .GenerateUserPanel(_user.Lives, _user.Points)
-                .GeneratePasswordPanel(_passwordHandler.CurrentHiddenPassword)
-                .GenerateUserInstructions()
-                .GetUserResponse(out _userResponse);
+            _interface.CleareScreen();
+            _interface.GenerateUserPanel(_user.Lives, _user.Points);
+            _interface.GeneratePasswordPanel(_passwordHandler.CurrentHiddenPassword);
+            _interface.GenerateUserInstructions();
+            _interface.GetUserResponse(out _userResponse);
 
             while (true)
             {
                 int option;
 
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !InterfaceOptions.GameScreenOptions.Contains(option))
+                if (!successfullyParsed && !Data.GameScreenOptions.Contains(option))
                 {
-                    _interface
-                        .CleareScreen()
-                        .GenerateUserPanel(_user.Lives, _user.Points)
-                        .GeneratePasswordPanel(_passwordHandler.CurrentHiddenPassword)
-                        .GenerateUserInstructions()
-                        .GenerateError()
-                        .GetUserResponse(out _userResponse);
+                    _interface.CleareScreen();
+                    _interface.GenerateUserPanel(_user.Lives, _user.Points);
+                    _interface.GeneratePasswordPanel(_passwordHandler.CurrentHiddenPassword);
+                    _interface.GenerateUserInstructions();
+                    _interface.GenerateError();
+                    _interface.GetUserResponse(out _userResponse);
                     continue;
                 }
                 return option;
@@ -342,21 +331,19 @@ namespace Meteora.Main
                 _interface.GenerateLose();
             }
 
-            _interface
-                .GenerateNewGame()
-                .GetUserResponse(out _userResponse);
+            _interface.GenerateNewGame();
+            _interface.GetUserResponse(out _userResponse);
 
             int option;
 
             while (true)
             {
                 var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !InterfaceOptions.EndGameScreenOptions.Contains(option))
+                if (!successfullyParsed && !Data.EndGameScreenOptions.Contains(option))
                 {
-                    _interface
-                        .GenerateNewGame()
-                        .GenerateError()
-                        .GetUserResponse(out _userResponse);
+                    _interface.GenerateNewGame();
+                    _interface.GenerateError();
+                    _interface.GetUserResponse(out _userResponse);
                     continue;
                 }
 

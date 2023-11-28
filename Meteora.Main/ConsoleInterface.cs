@@ -1,53 +1,43 @@
-﻿using Meteora.Main.Utils;
-
-namespace Meteora.Main
+﻿namespace Meteora.Main
 {
-    public class ConsoleInterface : IConsoleInterface
+    public class ConsoleInterface
     {
-        public ConsoleInterface CleareScreen()
+        public void CleareScreen()
         {
             Console.Clear();
-
-            return this;
         }
 
-        public ConsoleInterface GenerateWelcomeScreen()
+        public void GenerateWelcomeScreen()
         {
             Console.WriteLine("---- Welcome ----");
             Console.Write(" 1. Start new game.");
             Console.Write(" 2. Exit");
             Console.WriteLine($"");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateUserPanel(int hp, int points)
+        public void GenerateUserPanel(int hp, int points)
         {
             Console.WriteLine("");
             Console.WriteLine("---- User ----");
             Console.WriteLine($"HP: {hp}");
             Console.WriteLine($"Points: {points}");
             Console.WriteLine($"---- ---- ----");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateShop()
+        public void GenerateShop()
         {
             Console.WriteLine("---- Welcome to shop ----");
             int counter = 2;
             Console.Write($" 1. Exit");
-            foreach (var item in Letters.Vowels)
+            foreach (var item in Data.Vowels)
             {
                 Console.Write($" {counter}. {item}.");
                 counter++;
             }
             Console.WriteLine($"");
-
-            return this;
         }
 
-        public ConsoleInterface GeneratePasswordPanel(string password)
+        public void GeneratePasswordPanel(string password)
         {
             Console.WriteLine("");
             Console.WriteLine("---- Fortune weel ----");
@@ -58,10 +48,8 @@ namespace Meteora.Main
             }
             Console.WriteLine("");
             Console.WriteLine("---- ------- ---- ----");
-
-            return this;
         }
-        public ConsoleInterface GenerateUserInstructions()
+        public void GenerateUserInstructions()
         {
             Console.WriteLine("");
             Console.Write("---- Options:");
@@ -70,11 +58,9 @@ namespace Meteora.Main
             Console.Write(" 3. Exit");
             Console.Write(" ----");
             Console.WriteLine("");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateChoseDifficulty()
+        public void GenerateChoseDifficulty()
         {
             Console.WriteLine("");
             Console.WriteLine("---- Chose your Difficulty ----");
@@ -86,11 +72,9 @@ namespace Meteora.Main
             Console.Write(" 5. Exit");
             Console.Write(" ----");
             Console.WriteLine("");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateChoseCategory()
+        public void GenerateChoseCategory()
         {
             Console.WriteLine("");
             Console.WriteLine("---- Chose your Category ----");
@@ -102,31 +86,25 @@ namespace Meteora.Main
             Console.Write(" 5. Exit");
             Console.Write(" ----");
             Console.WriteLine("");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateWin()
+        public void GenerateWin()
         {
             Console.WriteLine("");
             Console.WriteLine("---- Congratulation ----");
             Console.WriteLine("---- You have won ----");
             Console.WriteLine("---- Congratulation ----");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateLose()
+        public void GenerateLose()
         {
             Console.WriteLine("");
             Console.WriteLine("---- We are so sorry ----");
             Console.WriteLine("---- You have lose ----");
             Console.WriteLine("---- We are so sorry ----");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateNewGame()
+        public void GenerateNewGame()
         {
             Console.WriteLine("");
             Console.Write("---- Options:");
@@ -134,25 +112,19 @@ namespace Meteora.Main
             Console.Write(" 2. Exit");
             Console.Write(" ----");
             Console.WriteLine("");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateError()
+        public void GenerateError()
         {
             Console.Write("[Wrong option]");
-
-            return this;
         }
 
-        public ConsoleInterface GenerateGoodBye()
+        public void GenerateGoodBye()
         {
             Console.WriteLine("Goodbye");
-
-            return this;
         }
 
-        public ConsoleInterface GetUserResponse(out string userResponse, string? text = null)
+        public void GetUserResponse(out string userResponse, string? text = null)
         {
             if (text != null)
             {
@@ -161,8 +133,6 @@ namespace Meteora.Main
 
             Console.Write("> ");
             userResponse = Console.ReadLine() ?? "";
-
-            return this;
         }
     }
 }

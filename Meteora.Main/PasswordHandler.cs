@@ -1,8 +1,6 @@
-﻿using Meteora.Main.Extentions;
-
-namespace Meteora.Main
+﻿namespace Meteora.Main
 {
-    public class PasswordHandler : IPasswordHandler
+    public class PasswordHandler
     {
         public PasswordHandler(string password)
         {
