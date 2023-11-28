@@ -9,6 +9,8 @@
 
         public static IEnumerable<string> Vowels = new[] { "a", "e", "i", "o", "u", "y" };
 
+        public static IEnumerable<int> PossiblePoints = new[] { -1, 100, 200, 300, 500 };
+
         public static IEnumerable<string> CapitalCities
         {
             get

@@ -2,18 +2,18 @@
 {
     public class GameEngine
     {
+        private User _user;
+        private PasswordHandler _passwordHandler;
+        private ConsoleInterface _interface;
+        private List<string> _vowels;
+        private string _userResponse;
+
         public GameEngine(User user, ConsoleInterface consoleInterface)
         {
             _user = user;
             _interface = consoleInterface;
             _vowels = Data.Vowels.ToList();
         }
-
-        private User _user;
-        private PasswordHandler _passwordHandler;
-        private ConsoleInterface _interface;
-        private List<string> _vowels;
-        private string _userResponse;
 
         public void Run()
         {
@@ -39,7 +39,7 @@
                 return;
             }
 
-            SetDifficulty(selectedOption);
+            DrawPoints();
 
             selectedOption = StartGameScreen();
             if (selectedOption == 5)
@@ -199,25 +199,9 @@
             }
         }
 
-        private void SetDifficulty(int option)
+        private void DrawPoints()
         {
-            switch (option)
-            {
-                case 1:
-                    _user.Points = 500;
-                    break;
-                case 2:
-                    _user.Points = 300;
-                    break;
-                case 3:
-                    _user.Points = 200;
-                    break;
-                case 4:
-                    _user.Points = 100;
-                    break;
-                default:
-                    break;
-            }
+            _user.Points = Data.PossiblePoints.RandomElement();
         }
 
         private int WelcomeScreen()
