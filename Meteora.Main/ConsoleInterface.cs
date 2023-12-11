@@ -60,20 +60,6 @@
             Console.WriteLine("");
         }
 
-        public void GenerateChoseDifficulty()
-        {
-            Console.WriteLine("");
-            Console.WriteLine("---- Chose your Difficulty ----");
-            Console.Write("---- Options:");
-            Console.Write(" 1. Easy(500).");
-            Console.Write(" 2. Medium(300).");
-            Console.Write(" 3. Hard(200).");
-            Console.Write(" 4. God(100)");
-            Console.Write(" 5. Exit");
-            Console.Write(" ----");
-            Console.WriteLine("");
-        }
-
         public void GenerateChoseCategory()
         {
             Console.WriteLine("");

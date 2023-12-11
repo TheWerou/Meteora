@@ -7,6 +7,7 @@
         private ConsoleInterface _interface;
         private List<string> _vowels;
         private string _userResponse;
+        private int _gamePrice = 0;
 
         public GameEngine(User user, ConsoleInterface consoleInterface)
         {
@@ -32,16 +33,9 @@
 
         public void StartGame()
         {
-            var selectedOption = StartGameScreenDificulty();
-            if (selectedOption == 5)
-            {
-                Exit();
-                return;
-            }
-
             DrawPoints();
 
-            selectedOption = StartGameScreen();
+            var selectedOption = StartGameScreen();
             if (selectedOption == 5)
             {
                 Exit();
@@ -175,7 +169,7 @@
             if (!hasLaterChanged && canPunish)
                 _user.HitUser(1);
 
-            _user.Points += foundLetters * 50;
+            _user.Points += foundLetters * _gamePrice;
         }
 
         private void GetNewPassword(int option)
@@ -201,7 +195,7 @@
 
         private void DrawPoints()
         {
-            _user.Points = Data.PossiblePoints.RandomElement();
+            _gamePrice = Data.PossiblePoints.RandomElement();
         }
 
         private int WelcomeScreen()
@@ -218,30 +212,6 @@
                 {
                     _interface.CleareScreen();
                     _interface.GenerateWelcomeScreen();
-                    _interface.GenerateError();
-                    _interface.GetUserResponse(out _userResponse);
-                    continue;
-                }
-
-                return option;
-            }
-        }
-
-        private int StartGameScreenDificulty()
-        {
-            _interface.CleareScreen();
-            _interface.GenerateChoseDifficulty();
-            _interface.GetUserResponse(out _userResponse);
-
-            while (true)
-            {
-                int option;
-
-                var successfullyParsed = int.TryParse(_userResponse, out option);
-                if (!successfullyParsed && !Data.StartGameScreenOptions.Contains(option))
-                {
-                    _interface.CleareScreen();
-                    _interface.GenerateChoseDifficulty();
                     _interface.GenerateError();
                     _interface.GetUserResponse(out _userResponse);
                     continue;
