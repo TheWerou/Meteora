@@ -54,15 +54,20 @@
                 while (true)
                 {
                     var selectedOption = GameScreen();
-                    if (selectedOption == 3)
+                    if (selectedOption == 4)
                         return;
-                    else if (selectedOption == 2)
-                    {
-                        ShopScreen();
-                    }
                     else if (selectedOption == 1)
                     {
                         GuessLetterScreen();
+                        break;
+                    }
+                    else if (selectedOption == 3)
+                    {
+                        ShopScreen();
+                    }              
+                    else if (selectedOption == 2)
+                    {
+                        GuessPassword();
                         break;
                     }
                 }
@@ -162,6 +167,23 @@
             AddRemovePoints(true);
         }
 
+        private void GuessPassword()
+        {
+            int option;
+
+            _interface.GetUserResponse(out _userResponse, "Provide password");
+            var successfullyParsed = int.TryParse(_userResponse, out option);
+            if (_userResponse == "" || successfullyParsed)
+            {
+                _interface.CleareScreen();
+                _interface.GenerateError();
+                Thread.Sleep(2000);
+                return;
+            }
+
+            AddRemovePointsPasword();
+        }
+
         private void AddRemovePoints(bool canPunish)
         {
             int foundLetters = 0;
@@ -170,6 +192,13 @@
                 _user.HitUser(1);
 
             _user.Points += foundLetters * _gamePrice;
+        }
+
+        private void AddRemovePointsPasword()
+        {
+            var hasLaterChanged = _passwordHandler.TryShowPassword(_userResponse.ToLower());
+            if (!hasLaterChanged)
+                _user.HitUser(1);
         }
 
         private void GetNewPassword(int option)

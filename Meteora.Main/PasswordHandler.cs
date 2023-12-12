@@ -39,6 +39,17 @@
             return true;
         }
 
+        public bool TryShowPassword(string password)
+        {
+            var pass = new string(_currentPassword.ToArray());
+            if (password != pass)
+                return false;
+
+            _currentHiddenPassword = _currentPassword;
+
+            return true;
+        }
+
         public bool IsPasswordGuessed()
         {
             return _currentHiddenPassword.SequenceEqual(_currentPassword);

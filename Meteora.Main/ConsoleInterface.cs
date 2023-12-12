@@ -54,8 +54,9 @@
             Console.WriteLine("");
             Console.Write("---- Options:");
             Console.Write(" 1. Provide letter.");
-            Console.Write(" 2. Shop.");
-            Console.Write(" 3. Exit");
+            Console.Write(" 2. Guess password.");
+            Console.Write(" 3. Shop.");
+            Console.Write(" 4. Exit");
             Console.Write(" ----");
             Console.WriteLine("");
         }
