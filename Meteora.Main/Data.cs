@@ -17,7 +17,7 @@
             {
                 return new[]
                 {
-                     "Warsow",
+                     "Warsaw",
                      "Gdansk",
                      "NewYork",
                      "Koszalin",
