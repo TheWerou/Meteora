@@ -64,7 +64,7 @@
                     else if (selectedOption == 3)
                     {
                         ShopScreen();
-                    }              
+                    }
                     else if (selectedOption == 2)
                     {
                         GuessPassword();
@@ -124,6 +124,7 @@
                     continue;
                 }
 
+                _userResponse = listOfLetters[index];
                 AddRemovePoints(false);
                 _vowels.RemoveAt(index);
                 break;
