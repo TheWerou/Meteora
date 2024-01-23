@@ -185,14 +185,15 @@
             AddRemovePointsPasword();
         }
 
-        private void AddRemovePoints(bool canPunish)
+        private void AddRemovePoints(bool canAddPoints)
         {
             int foundLetters = 0;
             var hasLaterChanged = _passwordHandler.TryShowLetter(_userResponse.ToLower()[0], out foundLetters);
-            if (!hasLaterChanged && canPunish)
+            if (!hasLaterChanged && canAddPoints)
                 _user.HitUser(1);
 
-            _user.Points += foundLetters * _gamePrice;
+            if (canAddPoints)
+                _user.Points += foundLetters * _gamePrice;
         }
 
         private void AddRemovePointsPasword()
